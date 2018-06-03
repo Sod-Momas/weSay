@@ -18,7 +18,6 @@ public class StatisticsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("count get");
         response.setContentType("json/html");
         response.setCharacterEncoding("UTF-8");
         // 影响内容输出器

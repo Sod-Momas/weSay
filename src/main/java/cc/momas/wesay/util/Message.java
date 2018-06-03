@@ -32,11 +32,16 @@ public class Message {
 		this.content = content;
 	}
 
-	
 	@Override
 	public String toString() {
-		return "Message [content=" + content + ", username=" + username + "]";
+		return "Message{" +
+				"username='" + username + '\'' +
+				", content='" + content + '\'' +
+				'}';
 	}
 
+	public String toJson(){
+		return "{\"content\":\"" + content + "\", \"username\":\"" + username + "\"}";
+	}
 	
 }

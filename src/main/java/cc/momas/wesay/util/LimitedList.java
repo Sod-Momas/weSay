@@ -2,6 +2,12 @@ package cc.momas.wesay.util;
 
 import java.util.LinkedList;
 
+/**
+ * 原本用来实现可限制长度的列表，现在废弃，使用更轻量级的实现
+ * @see cc.momas.wesay.util.MsgList
+ * @param <E>
+ */
+@Deprecated
 public class LimitedList<E> {
 	private int length;
 	private LinkedList<E> list = new LinkedList<E>();
