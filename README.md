@@ -2,7 +2,7 @@
 
 weSay聊天室
 
-![Build Status](https://travis-ci.org/Sod-Momas/weSay-java.svg?branch=master)
+[![Build Status](https://travis-ci.org/Sod-Momas/weSay-java.svg?branch=master)](https://travis-ci.org/Sod-Momas/weSay-java)
 
 ## 启动
 项目使用apache maven做包管理，使用maven命令可以轻松启动应用。  
