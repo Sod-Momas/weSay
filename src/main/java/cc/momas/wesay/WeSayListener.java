@@ -10,64 +10,22 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 
+/**
+ * 应用程序监听器
+ *
+ * @author Sod-Momas
+ */
 @WebListener
-public class WeSayListener implements ServletContextListener,
-        HttpSessionListener, HttpSessionAttributeListener {
-
-    // Public constructor is required by servlet spec
-    public WeSayListener() {
-    }
-
-    // -------------------------------------------------------
-    // ServletContextListener implementation
-    // -------------------------------------------------------
-    public void contextInitialized(ServletContextEvent sce) {
-      /* This method is called when the servlet context is
-         initialized(when the Web application is deployed). 
-         You can initialize servlet context related data here.
-      */
-    }
-
-    public void contextDestroyed(ServletContextEvent sce) {
-      /* This method is invoked when the Servlet Context 
-         (the Web application) is undeployed or 
-         Application Server shuts down.
-      */
-    }
-
-    // -------------------------------------------------------
-    // HttpSessionListener implementation
-    // -------------------------------------------------------
-    public void sessionCreated(HttpSessionEvent se) {
-        /* Session is created. */
-        se.getSession().setMaxInactiveInterval(60); // 指定一分钟不发言为下线状态
+public class WeSayListener implements HttpSessionListener {
+    @Override
+    public void sessionCreated(HttpSessionEvent sessionEvent) {
+        // 指定一分钟不发言为下线状态
+        sessionEvent.getSession().setMaxInactiveInterval(60);
         CommonHelper.userLogin();
     }
 
-    public void sessionDestroyed(HttpSessionEvent se) {
-        /* Session is destroyed. */
+    @Override
+    public void sessionDestroyed(HttpSessionEvent sessionEvent) {
         CommonHelper.userLogout();
-    }
-
-    // -------------------------------------------------------
-    // HttpSessionAttributeListener implementation
-    // -------------------------------------------------------
-
-    public void attributeAdded(HttpSessionBindingEvent sbe) {
-      /* This method is called when an attribute 
-         is added to a session.
-      */
-    }
-
-    public void attributeRemoved(HttpSessionBindingEvent sbe) {
-      /* This method is called when an attribute
-         is removed from a session.
-      */
-    }
-
-    public void attributeReplaced(HttpSessionBindingEvent sbe) {
-      /* This method is invoked when an attibute
-         is replaced in a session.
-      */
     }
 }

@@ -3,7 +3,7 @@
 	min-width: 320px;
 }
 .box>div{
-	box-shadow: 1px 1px 7px 0px #999;
+	box-shadow: 1px 1px 7px 0 #999;
 }
 #msgContent {
 	height : 360px;

@@ -14,9 +14,9 @@ function getMsg() {
                 var $pmsg = $("<p>");
                 var $b = $("<b>");
 
-                $b.append(obj.username + " : ");
+                $b.append(decodeURI(obj.username) + " : ");
                 $pusername.append($b);
-                $pmsg.append('&nbsp;&nbsp;&nbsp;&nbsp;' + encodeHTML(obj.content));
+                $pmsg.append('&nbsp;&nbsp;&nbsp;&nbsp;' + decodeURI(obj.content));
 
                 $("#msgContent").append($pusername);
                 $("#msgContent").append($pmsg);
@@ -30,7 +30,7 @@ function getMsg() {
 function sendMsg() {
     document.getElementById("msg").focus();
     var content = $("#msg").val();
-    if (content.trim() == "") {
+    if (!content.trim()) {
         return;
     }
     if (content.length > 200) {
@@ -39,7 +39,7 @@ function sendMsg() {
     }
     $(".input-group").removeClass("has-warning");
     var username = $("#username").html();
-    if (username == '点此改名') {
+    if (username === '点此改名') {
         username = '匿名用户';
     }
     $.ajax({
@@ -47,10 +47,7 @@ function sendMsg() {
         type: "post",
         data: {"code": 3, "username": username, "content": content},
         dataType: "json",
-        error: function (data, textStatus) {
-            alert('QAQ消息发不粗去啦,主人是不是连不上网惹?');
-        },
-        success: function (data, textStatus) {
+        complete: function (data, textStatus) {
             $("#msg").val("");
         }
     });
@@ -73,32 +70,11 @@ function getOnline() {
     });
 }
 
-function encodeHTML(htmlstr) {
-    var s = "";
-    if (!htmlstr) {
-        return "";
-    }
-    s = htmlstr.replace(/&/g, "&amp;");
-    s = s.replace(/</g, "&lt;");
-    s = s.replace(/>/g, "&gt;");
-    s = s.replace(/ /g, "&nbsp;");
-    s = s.replace(/\'/g, '&#39;');
-    s = s.replace(/\"/g, '&quot;');
-    return s;
-}
-
-$(document).ready(function () {
+jQuery(document).ready(function () {
     window.interval = setInterval("getMsg()", 3000);
     window.online = setInterval("getOnline()", 5000);
 
     getMsg();
-    $("#close").click(function () {
-        $("#close").blur();
-        if (confirm("关闭窗口吗?")) {
-            window.opener = null;
-            window.close();
-        }
-    });
     $("#btnsend").click(function () {
         sendMsg();
         getMsg();
@@ -116,16 +92,15 @@ $(document).ready(function () {
             return;
         }
         var e = event || window.event;
-        var keycode = e.keyCode || e.which;
-        if (keycode == 13) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
             sendMsg();
         }
     });
     $("#username").click(function () {
         var name = prompt("请输入您的昵称以供聊天", "您的名字");
         name = name == '您的名字' ? '匿名用户' : name;
-        $("#username").html(name != null ? name : '匿名用户');
+        $("#username").text(name != null ? name : '匿名用户');
     });
-
-})
+});
 
