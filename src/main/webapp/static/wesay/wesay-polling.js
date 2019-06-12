@@ -14,8 +14,6 @@ var Util = {
             success: function (data) {
                 var msgContent = document.getElementById("msgContent");
                 msgContent.innerHTML = '';
-                console.log('getMsg');
-                console.log(data);
 
                 for (var index = 0, len = data.length; index < len; ++index) {
                     /*
