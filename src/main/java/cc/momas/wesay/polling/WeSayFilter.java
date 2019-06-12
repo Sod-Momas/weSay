@@ -1,4 +1,4 @@
-package cc.momas.wesay;
+package cc.momas.wesay.polling;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -13,18 +13,23 @@ import java.io.IOException;
 public class WeSayFilter implements Filter {
 
     @Override
-    public void destroy() {
+    public void init(FilterConfig config) {
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json");
+        String charset = "UTF-8";
+        String contentType = "application/json";
+
+        request.setCharacterEncoding(charset);
+
         chain.doFilter(request, response);
+
+        response.setCharacterEncoding(charset);
+        response.setContentType(contentType);
     }
 
     @Override
-    public void init(javax.servlet.FilterConfig config) {
+    public void destroy() {
     }
-
 }
