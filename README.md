@@ -23,7 +23,7 @@ wesay聊天室
     1. 先把源码下载到本地
     
     ```bash
-    git clone https://github.com/Sod-Momas/wesay.git -b master
+    git clone https://github.com/Sod-Momas/wesay.git
     ```
     
     2. 进入项目根目录
@@ -38,26 +38,22 @@ wesay聊天室
     mvn clean package
     ```
     
-    4. 把打包好的 war 包放到 tomcat 的 webapps 文件夹下
+    4. 把打包好的 war 包复制到 tomcat 的 webapps 文件夹下
     
     ```bash
-    cp target/wesay-1.5.war /apache-tomcat-8.0.33/webapps/
+    cp target/wesay.war /apache-tomcat-8.0.33/webapps/wesay.war
     ```
     
-    5. 启动 tomcat 
+    5. 启动 tomcat ,tomcat 会自动部署(自动解压war包)
     
     ```bash
-    # (这一步需要您把 tomcat 的环境变量配置好)
-    catalina start
+    # Windows 环境使用bat文件, *nix环境下使用sh文件
+    /apache-tomcat-8.0.33/bin/startup.bat
     ```
     
     6. 访问项目
     
-    用浏览器打开 `localhost:8080/wesay`, 或命令行测试
-    
-    ```bash
-    curl localhost:8080/wesay
-    ```
+    用浏览器打开 `http://localhost:8080/wesay`,就可以看到聊天窗口了. 您可以使用多个浏览器打开, 不同浏览器视作不用用户,可以互相聊天
 
 ## 错误处理
 
