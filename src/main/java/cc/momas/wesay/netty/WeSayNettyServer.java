@@ -7,30 +7,25 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Sod-Momas
  * @since 2021-02-09
  */
 public class WeSayNettyServer {
+    private static WeSayEnvironment env;
+    private static final Logger log = LoggerFactory.getLogger(WeSayNettyServer.class);
 
     public static void main(String[] args) throws ParseException {
-        final var argLine = resoleArgs(args);
-        startServer(argLine);
+        log.info("server starting...");
+        env = new WeSayEnvironment(args);
+        startServer();
     }
 
-    private static CommandLine resoleArgs(String[] args) throws ParseException {
-        // create Options object
-        var options = new Options();
-        // add t option
-        options.addOption("port", false, "server listener port");
-        CommandLineParser parser = new DefaultParser();
-        return parser.parse( options, args);
-    }
-
-    private static void startServer(CommandLine argLine) {
-        final int port = getPort(argLine);
+    private static void startServer() {
         final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         final EventLoopGroup workerGroup = new NioEventLoopGroup();
         final ServerBootstrap bootstrap = new ServerBootstrap();
@@ -48,21 +43,15 @@ public class WeSayNettyServer {
                     }
                 });
         try {
-            final ChannelFuture cf = bootstrap.bind(port).sync();
-            System.out.println("netty server start at localhost:9000");
+            final ChannelFuture cf = bootstrap.bind(env.getPort()).sync();
+            log.info("netty server start at localhost:{}", env.getPort());
             cf.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
-            System.out.println("netty server closed");
+            log.info("server shutdown,bye.");
         }
     }
-
-    private static int getPort(CommandLine argLine) {
-        final var port = argLine.getOptionValue("port","80");
-        return Integer.parseInt(port);
-    }
-
 }
