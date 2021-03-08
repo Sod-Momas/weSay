@@ -1,12 +1,12 @@
 package cc.momas.wesay.netty;
 
+import cc.momas.wesay.netty.http.HttpServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +21,8 @@ public class WeSayNettyServer {
 
     public static void main(String[] args) throws ParseException {
         log.info("server starting...");
+        System.setProperty("io.netty.noUnsafe", Boolean.TRUE.toString());
+        System.setProperty("io.netty.tryUnsafe", Boolean.FALSE.toString());
         env = new WeSayEnvironment(args);
         startServer();
     }
@@ -33,15 +35,9 @@ public class WeSayNettyServer {
         bootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 1024)
-                .childHandler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel socketChannel) {
-                        final ChannelPipeline pipeline = socketChannel.pipeline();
-                        pipeline.addLast(new StringDecoder());
-                        pipeline.addLast(new StringEncoder());
-                        pipeline.addLast(new WesayServerHandler());
-                    }
-                });
+//                .childHandler(new PlainTextInitializer())
+                .childHandler(new HttpServerInitializer())
+        ;
         try {
             final ChannelFuture cf = bootstrap.bind(env.getPort()).sync();
             log.info("netty server start at localhost:{}", env.getPort());

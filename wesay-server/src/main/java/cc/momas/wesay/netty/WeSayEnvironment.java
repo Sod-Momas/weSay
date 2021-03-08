@@ -41,7 +41,7 @@ public class WeSayEnvironment {
      */
     public int getPort() {
         // get value from cmd
-        final var port = cmd.getOptionValue('p', "9000");
+        final String port = cmd.getOptionValue('p', "9000");
         return Integer.parseInt(port);
     }
 }

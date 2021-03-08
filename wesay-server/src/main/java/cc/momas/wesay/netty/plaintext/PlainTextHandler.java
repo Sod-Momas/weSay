@@ -1,5 +1,6 @@
-package cc.momas.wesay.netty;
+package cc.momas.wesay.netty.plaintext;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -15,7 +16,7 @@ import java.time.format.DateTimeFormatter;
  * @author Sod-Momas
  * @since 2021-02-09
  */
-public class WesayServerHandler extends SimpleChannelInboundHandler<String> {
+public class PlainTextHandler extends SimpleChannelInboundHandler<String> {
     private final Logger log = LoggerFactory.getLogger(getClass());
     /**
      * QQ群
@@ -35,7 +36,7 @@ public class WesayServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         // 群员发消息
-        final var channel = ctx.channel();
+        final Channel channel = ctx.channel();
 
         GROUP.forEach(ch -> {
             final String displayName;
@@ -58,6 +59,17 @@ public class WesayServerHandler extends SimpleChannelInboundHandler<String> {
         log.info(msg);
         GROUP.writeAndFlush(msg);
     }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        // 群员暴毙，立刻踢出群聊
+        GROUP.remove(ctx.channel());
+        ctx.close();
+        String msg = "[ " + ctx.channel().remoteAddress() + " ] 暴毙了";
+        GROUP.writeAndFlush(msg);
+        log.error(msg);
+    }
+
     private String now() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
