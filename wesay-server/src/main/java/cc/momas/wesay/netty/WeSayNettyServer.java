@@ -1,6 +1,6 @@
 package cc.momas.wesay.netty;
 
-import cc.momas.wesay.netty.http.HttpServerInitializer;
+import cc.momas.wesay.netty.plaintext.PlainTextInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -19,7 +19,7 @@ public class WeSayNettyServer {
     private static WeSayEnvironment env;
     private static final Logger log = LoggerFactory.getLogger(WeSayNettyServer.class);
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) {
         log.info("server starting...");
         System.setProperty("io.netty.noUnsafe", Boolean.TRUE.toString());
         System.setProperty("io.netty.tryUnsafe", Boolean.FALSE.toString());
@@ -35,8 +35,8 @@ public class WeSayNettyServer {
         bootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 1024)
-//                .childHandler(new PlainTextInitializer())
-                .childHandler(new HttpServerInitializer())
+                .childHandler(new PlainTextInitializer())
+//                .childHandler(new HttpServerInitializer())
         ;
         try {
             final ChannelFuture cf = bootstrap.bind(env.getPort()).sync();
