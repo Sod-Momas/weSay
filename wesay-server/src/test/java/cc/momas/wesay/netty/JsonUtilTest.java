@@ -17,7 +17,7 @@ public class JsonUtilTest {
         response.put("msg", "【a】 上线了");
         response.put("msgType", "sys");
         response.put("length", 122);
-        final var json = JsonUtil.stringify(response);
+        final String json = JsonUtil.stringify(response);
         System.out.println(json);
     }
 }

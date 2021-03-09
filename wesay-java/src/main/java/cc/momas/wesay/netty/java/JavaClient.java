@@ -16,8 +16,6 @@ import java.util.Scanner;
  */
 public class JavaClient {
     public static void main(String[] args) {
-        String host = System.getProperty("host", "localhost");
-        int port = Integer.parseInt(System.getProperty("port", "9000"));
 
         EventLoopGroup group = new NioEventLoopGroup();
         final Bootstrap bootstrap = new Bootstrap();
@@ -54,6 +52,9 @@ public class JavaClient {
                 });
 
         try {
+            final WeSayEnvironment env = new WeSayEnvironment(args);
+            final int port = env.getPort();
+            final String host = env.getHost();
             System.out.println("attempt to connect " + host + ':' + port + "...");
             final ChannelFuture cf = bootstrap.connect(host, port).sync();
             final Channel channel = cf.channel();
